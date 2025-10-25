@@ -11,6 +11,9 @@ importers:
       csv-parser:
         specifier: ^3.2.0
         version: 3.2.0
+      miniflux-rss:
+        specifier: ^0.1.1
+        version: 0.1.1
 
 packages:
 
@@ -19,6 +22,20 @@ packages:
     engines: {node: '>= 10'}
     hasBin: true
 
+  miniflux-rss@0.1.1:
+    resolution: {integrity: sha512-G4I5S1DnOcsxDofO1iSdtLqXNSCARPonEsfFg0FNyV8G79FauaXrDVr8twpjAk2p8Uu2G18V44EUZuFAnwtCxQ==}
+
+  typescript@3.9.10:
+    resolution: {integrity: sha512-w6fIxVE/H1PkLKcCPsFqKE7Kv7QUwhU8qQY2MueZXWx5cPZdwFupLgKK3vntcK98BtNHZtAF4LA/yl2a7k8R6Q==}
+    engines: {node: '>=4.2.0'}
+    hasBin: true
+
 snapshots:
 
   csv-parser@3.2.0: {}
+
+  miniflux-rss@0.1.1:
+    dependencies:
+      typescript: 3.9.10
+
+  typescript@3.9.10: {}
