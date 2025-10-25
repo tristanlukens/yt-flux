@@ -11,6 +11,9 @@ importers:
       csv-parser:
         specifier: ^3.2.0
         version: 3.2.0
+      miniflux-js:
+        specifier: ^0.0.7
+        version: 0.0.7
 
 packages:
 
@@ -19,6 +22,12 @@ packages:
     engines: {node: '>= 10'}
     hasBin: true
 
+  miniflux-js@0.0.7:
+    resolution: {integrity: sha512-YXJ7f3y+u9fJflfHuCdxVV2vsHZI947mote4yOExMpvdpA2tN3zCYOaaihBLosH4g5JYxYlFMO6UFW/y4/t4Zg==}
+    engines: {node: '>=18.12.0'}
+
 snapshots:
 
   csv-parser@3.2.0: {}
+
+  miniflux-js@0.0.7: {}

@@ -8,6 +8,7 @@
 	"license": "MIT",
 	"packageManager": "pnpm@10.18.3",
 	"dependencies": {
-		"csv-parser": "^3.2.0"
+		"csv-parser": "^3.2.0",
+		"miniflux-js": "^0.0.7"
 	}
 }
