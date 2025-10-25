@@ -2,10 +2,7 @@
 	"name": "yt-flux",
 	"version": "1.0.0",
 	"description": "Little program that interacts with the Miniflux api to download youtube videos semi-automatically",
-	"main": "./src/index.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
+	"main": "./src/convert.js",
 	"keywords": [],
 	"author": "Tristan Lukens",
 	"license": "MIT",
