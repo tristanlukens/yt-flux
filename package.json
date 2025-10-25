@@ -1,0 +1,16 @@
+{
+	"name": "yt-flux",
+	"version": "1.0.0",
+	"description": "Little program that interacts with the Miniflux api to download youtube videos semi-automatically",
+	"main": "./src/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "Tristan Lukens",
+	"license": "MIT",
+	"packageManager": "pnpm@10.18.3",
+	"dependencies": {
+		"csv-parser": "^3.2.0"
+	}
+}

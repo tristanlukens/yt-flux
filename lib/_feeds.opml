@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+    <head>
+        <title>YouTube Subscriptions RSS Feeds</title>
+        <dateCreated><DATE></dateCreated>
+        <author>fuck_ads OPML Generator</author>
+    </head>
+    <body>
+        <outline text="YouTube">
+            <!-- Outlines for YouTube RSS feeds -->
+            <OUTLINES> 
+        </outline>
+    </body>
+</opml>
