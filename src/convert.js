@@ -7,7 +7,7 @@
 // Logs out all the channel outlines for redirecting
 // with shell scripts
 //
-// Tristan Lukens, 20205
+// Tristan Lukens, 2025
 
 const csv = require("csv-parser");
 const fs = require("fs");

@@ -3,12 +3,15 @@
 	"version": "1.0.0",
 	"description": "Little program that interacts with the Miniflux api to download youtube videos semi-automatically",
 	"main": "./src/convert.js",
+	"type": "module",
 	"keywords": [],
 	"author": "Tristan Lukens",
 	"license": "MIT",
 	"packageManager": "pnpm@10.18.3",
 	"dependencies": {
 		"csv-parser": "^3.2.0",
-		"miniflux-js": "^0.0.7"
+		"lodash": "^4.17.21",
+		"miniflux-js": "^0.0.7",
+		"node-fzf": "^0.14.0"
 	}
 }
