@@ -8,23 +8,43 @@
 //  |___/
 //
 // Logs out all titles and subs, with id which can be
-// tracked to the video's urlo (fzf)
+// tracked to the video's url (fzf)
 //
 // Tristan Lukens, 2025
 
 import { MinifluxClient } from "miniflux-js";
 import * as fs from "node:fs/promises";
 
+import { Command } from "commander";
+
 import * as nfzf from "node-fzf";
 
-const OPTIONS = {
-	limit: 20,
+// const program = new Command();
+
+// program
+// 	.name("yt-flux")
+// 	.description(
+// 		"CLI tool which interacts with Miniflux RSS reader API to open, copy links to or download YouTube videos"
+// 	)
+// 	.version("0.1.0");
+
+// program.command("copy");
+
+let OPTIONS = {
+	limit: 10,
 	verbose: false,
 	action: "open",
 	browserPath: "/Applications/Brave Browser.app",
 };
 
-OPTIONS.verbose = process.argv.includes("--verbose");
+// OPTIONS.verbose = process.argv.includes("--verbose");
+
+// OPTIONS.limit = process.argv
+// 	.filter((arg) => arg.includes("="))
+// 	.find((pair) => /--limit=\d*/g.test(pair))
+// 	.match(/\d+$/g);
+
+// OPTIONS.action = process.argv.find((arg) => arg.match(/^-o|--open$/i));
 
 const ENV_PATH = `${process.env.HOME}/.config/yt-flux/env.example.json`;
 const getEnv = async () => {

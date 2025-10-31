@@ -38,9 +38,9 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
     exit 0
 fi
 
-cmd="./src/index.js"
+cmd="./src/convert.cjs"
 if [[ $1 == "-n" || $1 == "--no-shorts" ]]; then
-  cmd="./src/index.js -n"
+  cmd="./src/convert.cjs -n"
 fi
 
 outlines=$($runtime $cmd | tr -d "\n")

@@ -31,7 +31,7 @@ id=$(echo $choice | grep -o "^\[\d*\]")
 url=$(cat /tmp/yt-flux-entries.json | jq -r ". | with_entries(select(.value | startswith(\"$id\"))) | keys[]")
 
 echo "Selected $(tput bold)$(echo $choice | sed 's/^\[.*\]\ //g')$(tput sgr0)" # Removes everything between brackets, plus the colon and space after them
-echo "Excellent choice. Hopefully. You'll see, anyway."
+echo "Excellent choice. Hopefully."
 read -p "[O]pen, [d]ownload or [c]opy link? "
 
 case $REPLY in
@@ -56,9 +56,9 @@ if [ $action == "open" ]; then
 fi
 
 if [ $action == "copy" ]; then
-    echo $url | pbcopy && echo "Copied url to clipboard!"
+    echo $url | pbcopy && echo "Copied url to clipboard"
     exit 0
 fi
 
-echo "Using yt-dlp to download video..."
-yt-dlp -q --no-warnings -o "$HOME/Movies/%(title)s.%(ext)s" -f "mp4" $url && echo "Downloaded video as mp4 to configured directory!"
+echo "Using yt-dlp to download video. This could take a while..."
+yt-dlp -q --no-warnings -o "$HOME/Movies/%(title)s.%(ext)s" -f "mp4" $url && echo "Downloaded video as mp4 to configured directory"
