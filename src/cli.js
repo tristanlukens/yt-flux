@@ -1,4 +1,4 @@
-#!/opt/homebrew/opt/node/bin/node
+#!/usr/bin/env node
 
 //             _   ____                     _
 //   __ _  ___| |_|  _ \ ___  ___ ___ _ __ | |_ ___
@@ -12,70 +12,97 @@
 //
 // Tristan Lukens, 2025
 
+import { Command, Option } from "commander";
 import { MinifluxClient } from "miniflux-js";
+import nfzf from "node-fzf";
+
 import * as fs from "node:fs/promises";
+import * as util from "node:util";
+import * as child_process from "node:child_process";
 
-import { Command } from "commander";
+// ---------------
 
-import * as nfzf from "node-fzf";
+const program = new Command();
 
-// const program = new Command();
-
-// program
-// 	.name("yt-flux")
-// 	.description(
-// 		"CLI tool which interacts with Miniflux RSS reader API to open, copy links to or download YouTube videos"
-// 	)
-// 	.version("0.1.0");
-
-// program.command("copy");
-
-let OPTIONS = {
+const OPTION_DEFAULTS = {
 	limit: 10,
 	verbose: false,
 	action: "open",
-	browserPath: "/Applications/Brave Browser.app",
+	directory: `${process.env.HOME}/Movies/`,
+	envFile: `${process.env.HOME}/.config/yt-flux/env.json`,
 };
 
-// OPTIONS.verbose = process.argv.includes("--verbose");
+program
+	.name("yt-flux")
+	.description(
+		"Tool that interacts with Miniflux RSS reader API to open, copy links to or download YouTube videos"
+	)
+	.option(
+		"-l, --limit <limit>",
+		"limit for the number of listed videos",
+		OPTION_DEFAULTS.limit
+	)
+	.addOption(
+		new Option(
+			"-a, --action <action>",
+			"action to perform on selected video"
+		)
+			.choices(["open", "download", "copy", "o", "d", "c"])
+			.default(OPTION_DEFAULTS.action)
+	)
+	.option(
+		"-d, --directory <path>",
+		"directory to download videos to",
+		OPTION_DEFAULTS.directory
+	)
+	.option("-b, --browser <path>", "path to browser to open video in")
+	.option(
+		"-v, --verbose",
+		"display JavaScript errors",
+		OPTION_DEFAULTS.verbose
+	)
+	.option(
+		"--env-file <path>",
+		"path to environment json file",
+		OPTION_DEFAULTS.envFile
+	)
+	.version("0.1.0");
 
-// OPTIONS.limit = process.argv
-// 	.filter((arg) => arg.includes("="))
-// 	.find((pair) => /--limit=\d*/g.test(pair))
-// 	.match(/\d+$/g);
+program.parse();
 
-// OPTIONS.action = process.argv.find((arg) => arg.match(/^-o|--open$/i));
+const OPTIONS = program.opts();
 
-const ENV_PATH = `${process.env.HOME}/.config/yt-flux/env.example.json`;
+// ---------------
+
 const getEnv = async () => {
 	try {
-		const buf = await fs.readFile(ENV_PATH);
+		const buf = await fs.readFile(OPTIONS.envFile);
 		return JSON.parse(buf);
 	} catch (err) {
-		console.log(
+		console.error(
 			"Opening of local environment file failed. Use flag --verbose for JavaScript error"
 		);
-		if (OPTIONS.verbose) console.log(`\n${err}`);
+		if (OPTIONS.verbose) console.error(`\n${err}`);
 		process.exit(1);
 	}
 };
 
 const ENV = await getEnv();
 
-const getCategoryId = async () => {
+const getId = async () => {
 	if (ENV.ytId) return ENV.ytId;
 
 	const all = await client.getCategories();
 	return all.find((c) => c.title == "YouTube").id;
 };
 
+const id = await getId();
+
 const client = new MinifluxClient({
 	baseURL: ENV.baseURL,
 	apiKey: ENV.key,
 	authType: "api_key",
 });
-
-const id = await getCategoryId();
 
 const entries = (
 	await client.getCategoryEntries(id, {
@@ -86,7 +113,22 @@ const entries = (
 
 let list = {};
 entries.forEach((e) => {
-	list[`${e.url}`] = `[${e.id}] ${e.author} -> ${e.title}`;
+	list[`[${e.id}] ${e.author} -> ${e.title}`] = `${e.url}`;
 });
 
-console.log(JSON.stringify(list));
+// Now this is what I call hideously elegant
+const videos = Object.keys(list);
+const video = await (async () => (await nfzf(videos)).selected.value)();
+const url = await list[video];
+
+switch (OPTIONS.action) {
+	case "open":
+		child_process.spawn("open", [
+			"-a",
+			"/Applications/Brave Browser.app",
+			url,
+		]);
+		break;
+	default:
+		console.log("This option has not been implemented yet");
+}
