@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-//             _   ____                     _
-//   __ _  ___| |_|  _ \ ___  ___ ___ _ __ | |_ ___
-//  / _` |/ _ \ __| |_) / _ \/ __/ _ \ '_ \| __/ __|
-// | (_| |  __/ |_|  _ <  __/ (_|  __/ | | | |_\__ \
-//  \__, |\___|\__|_| \_\___|\___\___|_| |_|\__|___/
+//        _         __ _
+//  _   _| |_      / _| |_   ___  __
+// | | | | __|____| |_| | | | \ \/ /
+// | |_| | ||_____|  _| | |_| |>  <
+//  \__, |\__|    |_| |_|\__,_/_/\_\
 //  |___/
 //
 // Logs out all titles and subs, with id which can be
@@ -16,8 +16,9 @@ import { Command, Option } from "commander";
 import { MinifluxClient } from "miniflux-js";
 import nfzf from "node-fzf";
 
+import yoctoSpinner from "yocto-spinner";
+
 import * as fs from "node:fs/promises";
-import * as util from "node:util";
 import * as child_process from "node:child_process";
 
 // ---------------
@@ -30,6 +31,7 @@ const OPTION_DEFAULTS = {
 	action: "open",
 	directory: `${process.env.HOME}/Movies/`,
 	envFile: `${process.env.HOME}/.config/yt-flux/env.json`,
+	browser: "/Applications/Brave Browser.app",
 };
 
 program
@@ -55,7 +57,11 @@ program
 		"directory to download videos to",
 		OPTION_DEFAULTS.directory
 	)
-	.option("-b, --browser <path>", "path to browser to open video in")
+	.option(
+		"-b, --browser <path>",
+		"path to browser to open video in",
+		OPTION_DEFAULTS.browser
+	)
 	.option(
 		"-v, --verbose",
 		"display JavaScript errors",
@@ -104,6 +110,10 @@ const client = new MinifluxClient({
 	authType: "api_key",
 });
 
+const spinner = yoctoSpinner({
+	text: "Requesting recent entries. This might take a while...",
+}).start();
+
 const entries = (
 	await client.getCategoryEntries(id, {
 		limit: OPTIONS.limit,
@@ -111,24 +121,60 @@ const entries = (
 	})
 ).entries;
 
+spinner.success("Acquired recent entries");
+
 let list = {};
 entries.forEach((e) => {
-	list[`[${e.id}] ${e.author} -> ${e.title}`] = `${e.url}`;
+	list[`${e.author} -> ${e.title}`] = `${e.url}`;
 });
 
 // Now this is what I call hideously elegant
 const videos = Object.keys(list);
-const video = await (async () => (await nfzf(videos)).selected.value)();
+const video = await (async () =>
+	(
+		await nfzf({ list: videos, height: 100 })
+	).selected.value)();
 const url = await list[video];
 
 switch (OPTIONS.action) {
+	case "o":
 	case "open":
-		child_process.spawn("open", [
-			"-a",
-			"/Applications/Brave Browser.app",
-			url,
-		]);
+		console.log(`Selected: ${video}`);
+		console.log("Opening in configured browser...");
+
+		child_process.spawn("open", ["-a", OPTIONS.browser, url]);
+
+		break;
+	case "d":
+	case "download":
+		console.log(`Selected: ${video}`);
+		const spinner = yoctoSpinner({
+			text: "Downloading video with yt-dlp. This might take a while...",
+		}).start();
+
+		child_process
+			.spawn("yt-dlp", [
+				// "-q",
+				// "--no-warnings",
+				"-o",
+				`${OPTIONS.directory}/%(title)s.%(ext)s`,
+				"-f",
+				"mp4",
+				`${url}`,
+			])
+			.on("exit", () => {
+				spinner.success("Download completed");
+			});
+		break;
+	case "c":
+	case "copy":
+		console.log(`Selected: ${video}`);
+		console.log(`Copying link (${url}) to clipboard...`);
+
+		const proc = child_process.spawn("pbcopy");
+		proc.stdin.write(`${url}`);
+		proc.stdin.end();
 		break;
 	default:
-		console.log("This option has not been implemented yet");
+		console.log(`Unknown action: ${OPTIONS.action}`);
 }
