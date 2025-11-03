@@ -11,7 +11,7 @@
 // the user select which one to download/copy/open
 //
 // This things a work in progress. It functions... but it's
-// ugly as hell and incredibly unportable. Give it time. LET BRO COOK
+// ugly as hell and incredibly unportable. Give it time. Let bro cook.
 //
 // Tristan Lukens, 2025
 
@@ -31,7 +31,7 @@ const program = new Command();
 const OPTION_DEFAULTS = {
 	limit: 10,
 	verbose: false,
-	action: "open",
+	action: "play",
 	directory: `${process.env.HOME}/Movies/`,
 	envFile: `${process.env.HOME}/.config/yt-flux/env.json`,
 	browser: "/Applications/Brave Browser.app",
@@ -52,7 +52,20 @@ program
 			"-a, --action <action>",
 			"action to perform on selected video"
 		)
-			.choices(["open", "download", "copy", "o", "d", "c"])
+			.choices([
+				"play",
+				"open",
+				"download",
+				"copy",
+				"pl",
+				"op",
+				"dl",
+				"cp",
+				"p",
+				"o",
+				"d",
+				"c",
+			])
 			.default(OPTION_DEFAULTS.action)
 	)
 	.option(
@@ -140,15 +153,24 @@ const video = await (async () =>
 const url = await list[video];
 
 switch (OPTIONS.action) {
+	case "p":
+	case "pl":
+	case "play":
+		console.log(`Selected: ${video}`);
+		console.log("Opening in IINA...");
+
+		child_process.spawn("iina", [url]);
+		break;
 	case "o":
+	case "op":
 	case "open":
 		console.log(`Selected: ${video}`);
 		console.log("Opening in configured browser...");
 
 		child_process.spawn("open", ["-a", OPTIONS.browser, url]);
-
 		break;
 	case "d":
+	case "dl":
 	case "download":
 		console.log(`Selected: ${video}`);
 		const spinner = yoctoSpinner({
@@ -170,6 +192,7 @@ switch (OPTIONS.action) {
 			});
 		break;
 	case "c":
+	case "cp":
 	case "copy":
 		console.log(`Selected: ${video}`);
 		console.log(`Copying link (${url}) to clipboard...`);
