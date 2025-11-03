@@ -7,8 +7,11 @@
 //  \__, |\__|    |_| |_|\__,_/_/\_\
 //  |___/
 //
-// Logs out all titles and subs, with id which can be
-// tracked to the video's url (fzf)
+// Uses Miniflux API to gather recent youtube videos, then lets
+// the user select which one to download/copy/open
+//
+// This things a work in progress. It functions... but it's
+// ugly as hell and incredibly unportable. Give it time. LET BRO COOK
 //
 // Tristan Lukens, 2025
 

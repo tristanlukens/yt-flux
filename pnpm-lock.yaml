@@ -14,9 +14,6 @@ importers:
       csv-parser:
         specifier: ^3.2.0
         version: 3.2.0
-      lodash:
-        specifier: ^4.17.21
-        version: 4.17.21
       miniflux-js:
         specifier: ^0.0.7
         version: 0.0.7
@@ -57,9 +54,6 @@ packages:
 
   keypress@0.2.1:
     resolution: {integrity: sha512-HjorDJFNhnM4SicvaUXac0X77NiskggxJdesG72+O5zBKpSqKFCrqmndKVqpu3pFqkla0St6uGk8Ju0sCurrmg==}
-
-  lodash@4.17.21:
-    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
 
   mimic-fn@2.1.0:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}
@@ -136,8 +130,6 @@ snapshots:
   is-fullwidth-code-point@2.0.0: {}
 
   keypress@0.2.1: {}
-
-  lodash@4.17.21: {}
 
   mimic-fn@2.1.0: {}
 
