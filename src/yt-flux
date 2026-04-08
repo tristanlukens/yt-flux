@@ -33,7 +33,7 @@ const OPTION_DEFAULTS = {
 	verbose: false,
 	action: "play",
 	directory: `${process.env.HOME}/Movies/`,
-	envFile: `${process.env.HOME}/.config/yt-flux/env.json`,
+	envFile: `${process.env.HOME}/.config/yt-flux/env.example.json`,
 	browser: "/Applications/Brave Browser.app",
 };
 
