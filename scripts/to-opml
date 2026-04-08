@@ -50,7 +50,7 @@ outlines=$($runtime $cmd | tr -d "\n")
 # Since I'm on macOS, I'm specifying the file name for
 # the backup file — no file — this works differently
 # on other UNIX systems
-cat ./lib/_feeds.opml\
-    | sed "s/<DATE>/${now}/g"\
-    | awk -v r="$outlines" '{gsub(/<OUTLINES>/,r)}1'\
+cat ./lib/_feeds.opml \
+    | sed "s/<DATE>/${now}/g" \
+    | awk -v r="$outlines" '{gsub(/<OUTLINES>/,r)}1' \
     > ./dist/feeds.opml
